@@ -4,11 +4,11 @@
 
 
 # Example project files
-src/serprog/sdkconfig
-src/serprog/sdkconfig.old
-src/serprog/build
-src/serprog/managed_components/*
-src/serprog/trace
+sdkconfig
+sdkconfig.old
+build
+managed_components/*
+trace
 
 # emacs
 .dir-locals.el
