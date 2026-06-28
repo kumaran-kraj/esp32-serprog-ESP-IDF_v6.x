@@ -3,8 +3,12 @@
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "driver/spi_master.h"
-#include "esp_vfs_dev.h"
+
+#include "driver/spi_master.h"   
+#include "driver/uart.h"         
+#include "driver/uart_vfs.h"
+#include "esp_vfs_dev.h"         
+
 #include "sdkconfig.h"
 #include "esp_log.h"
 
@@ -418,10 +422,17 @@ void app_main(void)
     ret = uart_driver_install(HW_UART_NUM, HW_UART_SERBUF_SIZE, 0, 0, NULL, ESP_INTR_FLAG_IRAM);
     ESP_ERROR_CHECK(ret);
 
-    esp_vfs_dev_uart_port_set_rx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
-    esp_vfs_dev_uart_port_set_tx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
+    // See Migration Notes ESP-IDF v6.x
 
-    esp_vfs_dev_uart_use_driver(HW_UART_NUM);
+    // esp_vfs_dev_uart_port_set_rx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
+    // esp_vfs_dev_uart_port_set_tx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
+
+    // esp_vfs_dev_uart_use_driver(HW_UART_NUM);
+    
+    uart_vfs_dev_port_set_rx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
+    uart_vfs_dev_port_set_tx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
+    
+    uart_vfs_dev_use_driver(HW_UART_NUM);
 
     #elif USE_USB_CDC
         #error not implemented
