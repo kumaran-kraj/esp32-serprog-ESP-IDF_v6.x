@@ -2,7 +2,8 @@
 
 a minimal flashrom/serprog SPI programmer implementation for esp32 family, inspired by [pico-serprog](https://github.com/stacksmashing/pico-serprog) and [stm32-vserprog](https://github.com/dword1511/stm32-vserprog)
 
-  
+
+![esp32 c3 super mini to 25 series spi nor flash wiring diagram](.github/esp32c3_supermini_serprog.svg)  
 
 ## Features
 
