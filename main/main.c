@@ -4,10 +4,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "driver/spi_master.h"   
-#include "driver/uart.h"         
+#include "driver/spi_master.h"   // Matches 'esp_driver_spi' dependency
+#include "driver/uart.h"         // Matches 'esp_driver_uart' dependency
+#include "esp_vfs_dev.h"         // Matches 'vfs' dependency
+// #include "vfs/uart_vfs.h"
 #include "driver/uart_vfs.h"
-#include "esp_vfs_dev.h"         
+
+// #include "esp_vfs_dev_uart.h"    // Matches 'vfs' dependency
+// #include "esp_vfs_uart.h"
 
 #include "sdkconfig.h"
 #include "esp_log.h"
@@ -56,7 +60,9 @@
 
 #elif defined CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG
     #include "driver/usb_serial_jtag.h"
-    #include "esp_vfs_usb_serial_jtag.h"
+    // #include "esp_vfs_usb_serial_jtag.h"
+    #include "driver/usb_serial_jtag_vfs.h"
+    
 
     #define USE_SERIAL_JTAG
 
@@ -397,10 +403,15 @@ void app_main(void)
     ret = usb_serial_jtag_driver_install(&usb_serial_jtag_config);
     ESP_ERROR_CHECK(ret);
 
-    esp_vfs_dev_usb_serial_jtag_set_rx_line_endings(ESP_LINE_ENDINGS_LF);
-    esp_vfs_dev_usb_serial_jtag_set_tx_line_endings(ESP_LINE_ENDINGS_LF);
+    // esp_vfs_dev_usb_serial_jtag_set_rx_line_endings(ESP_LINE_ENDINGS_LF);
+    // esp_vfs_dev_usb_serial_jtag_set_tx_line_endings(ESP_LINE_ENDINGS_LF);
     
-    esp_vfs_usb_serial_jtag_use_driver();
+    // esp_vfs_usb_serial_jtag_use_driver();
+
+    usb_serial_jtag_vfs_set_rx_line_endings(ESP_LINE_ENDINGS_LF);
+    usb_serial_jtag_vfs_set_tx_line_endings(ESP_LINE_ENDINGS_LF);
+
+    usb_serial_jtag_vfs_use_driver();
 
     #elif defined USE_HW_UART
     //configure HW uart
@@ -428,7 +439,7 @@ void app_main(void)
     // esp_vfs_dev_uart_port_set_tx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
 
     // esp_vfs_dev_uart_use_driver(HW_UART_NUM);
-    
+
     uart_vfs_dev_port_set_rx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
     uart_vfs_dev_port_set_tx_line_endings(HW_UART_NUM, ESP_LINE_ENDINGS_LF);
     
